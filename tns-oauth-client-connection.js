@@ -50,14 +50,22 @@ export class TnsOAuthClientConnection {
         }, (error) => this.completion(null, null, error));
     }
     startTokenRefresh() {
-        const tokenUrl = this.client.provider.authority + this.client.provider.tokenEndpoint;
+        console.log('---------------------------------------------------------------------------------');
+        console.dir(this.client.provider);
+        console.log('refresh token?');
+        console.dir(this.client.tokenResult.refreshToken);
+        console.log('---------------------------------------------------------------------------------');
+        // const tokenUrl = this.client.provider.authority + this.client.provider.tokenEndpoint;
+        const tokenUrl = this.client.provider.tokenEndpointBase + this.client.provider.authorizeEndpoint;
         const headers = {
             "Content-Type": "application/x-www-form-urlencoded",
         };
         let body = null;
-        switch (this.client.provider.options.openIdSupport) {
+        // switch (this.client.provider.options.openIdSupport) {
+        switch (this.client.provider.openIdSupport) {
             case "oid-full":
-                const options1 = (this.client.provider.options);
+                // const options1 = (this.client.provider.options);
+                const options1 = this.client.provider.options;
                 body = querystring.stringify({
                     grant_type: "refresh_token",
                     refresh_token: this.client.tokenResult.refreshToken,
@@ -65,7 +73,8 @@ export class TnsOAuthClientConnection {
                 });
                 break;
             case "oid-none":
-                const options2 = (this.client.provider.options);
+                // const options2 = (this.client.provider.options);
+                const options2 = this.client.provider.options;
                 body = querystring.stringify({
                     grant_type: "refresh_token",
                     refresh_token: this.client.tokenResult.refreshToken,
@@ -95,7 +104,8 @@ export class TnsOAuthClientConnection {
     }
     getAccessTokenUrl(client) {
         let oauth2 = null;
-        switch (client.provider.options.openIdSupport) {
+        // switch (client.provider.options.openIdSupport) {
+        switch (client.provider.openIdSupport) {
             case "oid-full":
                 const options1 = client.provider.options;
                 oauth2 = {

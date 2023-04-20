@@ -26,6 +26,10 @@ export class TnsOAuthClient {
     }
     loginWithCompletion(completion) {
         if (this.provider) {
+            console.log('-------------------- loginWithCompletion ------------------------');
+            console.dir(this);
+            console.log('-----------------------------------------------------------------');
+
             this.loginController.loginWithParametersFrameCompletion(null, Frame.topmost(), this.provider.options.urlScheme, completion);
         }
         else {

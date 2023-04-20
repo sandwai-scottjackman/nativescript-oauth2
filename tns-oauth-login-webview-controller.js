@@ -14,6 +14,8 @@ export class TnsOAuthLoginWebViewController {
     }
     loginWithParametersFrameCompletion(parameters, frame, urlScheme, completion) {
         const fullUrl = this.loginController.preLoginSetup(frame, urlScheme, completion);
+        console.log('------------------------ loginWithParametersFrameCompletion -----------------------------');
+        console.log(fullUrl);
         this.openUrlWithParametersCompletion(fullUrl, frame);
     }
     logoutWithParametersFrameCompletion(parameters, frame, urlScheme, completion) {
@@ -21,6 +23,8 @@ export class TnsOAuthLoginWebViewController {
         this.openUrlWithParametersCompletion(fullUrl, frame);
     }
     openUrlWithParametersCompletion(fullUrl, frame) {
+        console.log('----------------------------- openUrlWithParametersCompletion -----------------------------')
+        console.dir(fullUrl);
         this.goToWebViewPage(frame, fullUrl);
     }
     goToWebViewPage(frame, url) {
@@ -75,6 +79,8 @@ export class TnsOAuthLoginWebViewController {
         console.log("WebView loadStarted " + args.url);
         if (args.url.startsWith(this.loginController.client.provider.options.redirectUri)) {
             if (global.isAndroid && args.object && args.object["stopLoading"]) {
+                args.object.parent.style.visibility = 'collapse'; // this page is meant to stop loading, but seems to still show an android url scheme error page, so lets just hide it with css! SCOTT
+
                 args.object["stopLoading"]();
             }
             this.resumeWithUrl(args.url);
@@ -82,6 +88,15 @@ export class TnsOAuthLoginWebViewController {
     }
     pageLoadFinished(args) {
         console.log("WebView loadFinished " + args.url);
+        if (args.url.startsWith(this.loginController.client.provider.options.redirectUri)) {
+            if (global.isAndroid && args.object && args.object["stopLoading"]) {
+                args.object.parent.style.visibility = 'collapse'; // this page is meant to stop loading, but seems to still show an android url scheme error page, so lets just hide it with css! SCOTT
+
+                args.object["stopLoading"]();
+            }
+            this.resumeWithUrl(args.url);
+        }
+
     }
     setAndroidSoftInputModeToResize() {
         const window = Application.android.foregroundActivity.getWindow();
