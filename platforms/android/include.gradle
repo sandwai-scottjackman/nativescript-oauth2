@@ -1,0 +1,5 @@
+dependencies {
+  api 'com.android.support:customtabs:27.0.2'
+  api 'com.android.support:appcompat-v7:27.0.2'
+  implementation 'androidx.browser:browser:1.2.0'
+}
